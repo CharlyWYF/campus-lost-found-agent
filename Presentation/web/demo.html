@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081d2e">
+  <title>寻物有迹 · 自动演示</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <div class="stage">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+    <div class="grid-lines"></div>
+
+    <header class="top">
+      <div class="brand">
+        <span class="brand-mark">寻</span>
+        <div class="brand-copy">
+          <strong>寻物有迹</strong>
+          <small>AUTO DEMO · CAMPUS LOST &amp; FOUND</small>
+        </div>
+      </div>
+      <div class="top-note"><i></i>全自动播放 · 不依赖网络</div>
+      <div class="top-actions">
+        <button type="button" id="voice-btn" class="ctrl-btn">旁白：开</button>
+        <button type="button" id="pause-btn" class="ctrl-btn">暂停</button>
+        <button type="button" id="replay-btn" class="ctrl-btn strong">重播</button>
+      </div>
+    </header>
+
+    <main class="body">
+      <aside class="story">
+        <div class="eyebrow">AUTO DEMO / 01</div>
+        <h1>从拾得，<br>到找回，<br><em>再到交接。</em></h1>
+        <p class="story-sub">一个校园失物招领 Agent 的完整闭环。没有 API，也不影响现场网络。</p>
+
+        <div class="steps">
+          <div class="step active" data-step="1">
+            <b>01</b>
+            <div><strong>拾得登记</strong><span>先记下只有主人知道的细节</span></div>
+          </div>
+          <div class="step" data-step="2">
+            <b>02</b>
+            <div><strong>失主认领</strong><span>先匹配，再核验，不靠猜</span></div>
+          </div>
+          <div class="step" data-step="3">
+            <b>03</b>
+            <div><strong>管理台交接</strong><span>先预览，再确认，全程留痕</span></div>
+          </div>
+        </div>
+
+        <div class="caption">
+          <div class="caption-step" id="caption-step">01 / 拾得登记</div>
+          <h2 id="caption-title">捡到的人，先登记</h2>
+          <p id="caption-text">只有主人知道的细节，被单独保存，不公开。</p>
+        </div>
+
+        <div class="offline"><span></span>离线录制 · 可暂停 / 重播</div>
+      </aside>
+
+      <section class="screen-stage">
+        <div class="browser">
+          <div class="browser-bar">
+            <span class="traffic"><i></i><i></i><i></i></span>
+            <span class="url">寻物有迹 · 校园失物招领</span>
+            <span class="browser-live">LIVE</span>
+          </div>
+
+          <div class="app">
+            <div class="app-top">
+              <div class="app-brand"><span>寻</span> 寻物有迹</div>
+              <div class="app-tabs"><span class="on">学生端</span><span>管理台</span></div>
+              <div class="app-status"><i></i>LLM 在线</div>
+            </div>
+
+            <!-- 学生端 -->
+            <div id="app-student" class="app-view student-view">
+              <section class="chat-pane">
+                <div class="chat-head">
+                  <div>
+                    <div class="mini-eyebrow">LOST &amp; FOUND · STUDENT</div>
+                    <h2>丢了东西？先和小寻说说。</h2>
+                  </div>
+                  <div class="chat-tip">描述越具体，匹配越准<br><em>挂件 · 贴纸 · 刻字 · 磨损</em></div>
+                </div>
+
+                <div id="demo-messages" class="msgs">
+                  <div class="empty-hint" id="chat-empty">
+                    <div class="empty-orb">寻</div>
+                    <strong>把丢失的细节，讲给小寻听。</strong>
+                    <span>它会追问，会匹配，也会核对。</span>
+                  </div>
+                </div>
+
+                <div class="composer">
+                  <span class="composer-text">直接说，比如：我丢了一个黑色耳机盒</span>
+                  <span class="send">发送 <i>➤</i></span>
+                </div>
+              </section>
+
+              <aside class="workspace">
+                <div class="ws-head"><span class="mini-eyebrow">AGENT WORKSPACE</span><h3>小寻的工作台</h3></div>
+                <div id="demo-slots" class="slots">
+                  <span class="slot-placeholder">对话开始后，这里会显示线索。</span>
+                </div>
+                <div class="ws-section">
+                  <div class="ws-title">候选记录 <b id="candidate-count">0</b></div>
+                  <div id="demo-candidates" class="candidates">
+                    <span class="slot-placeholder">还没有开始匹配。</span>
+                  </div>
+                </div>
+                <div class="ws-section">
+                  <div class="ws-title">决策轨迹</div>
+                  <div id="demo-trace" class="trace">
+                    <span class="slot-placeholder">工具调用会显示在这里。</span>
+                  </div>
+                </div>
+              </aside>
+            </div>
+
+            <!-- 管理台 -->
+            <div id="app-admin" class="app-view admin-view hidden">
+              <aside class="admin-side">
+                <div class="admin-user"><span class="avatar">值</span><div><strong>值班老师</strong><small>管理员 · 已登录</small></div></div>
+                <div class="admin-nav"><span class="on">案件</span><span>认领</span><span>审计</span></div>
+                <div class="stats">
+                  <div class="stat"><b id="stat-total">16</b><span>总案件</span></div>
+                  <div class="stat"><b id="stat-open">13</b><span>未结案</span></div>
+                  <div class="stat"><b id="stat-claimed">1</b><span>已认领</span></div>
+                  <div class="stat"><b id="stat-returned">0</b><span>已归还</span></div>
+                </div>
+                <div class="admin-tip"><strong>写操作怎么走</strong><span>预览 → 确认 → 落库 → 审计</span></div>
+              </aside>
+
+              <section class="admin-main">
+                <div class="admin-head">
+                  <div><div class="mini-eyebrow">OPERATIONS</div><h2>案件</h2></div>
+                  <div class="admin-search">筛选标题 / 地点 / 状态…</div>
+                </div>
+                <div class="admin-table" id="admin-table">
+                  <div class="tr th"><span>编号</span><span>状态</span><span>物品</span><span>地点</span><span>认领</span></div>
+                  <div class="tr" data-id="F-20261126-001">
+                    <span><b>F-20261126-001</b><small>昨天 16:30</small></span>
+                    <span class="st claimed" data-status>已认领</span>
+                    <span><b>黑色 AirPods 耳机盒</b><small>耳机盒 · 黑色</small></span>
+                    <span>图书馆三楼</span>
+                    <span>1</span>
+                  </div>
+                  <div class="tr" data-id="F-20261126-002">
+                    <span><b>F-20261126-002</b><small>昨天 15:10</small></span>
+                    <span class="st open">待处理</span>
+                    <span><b>黑色有线耳机</b><small>耳机 · 黑色</small></span>
+                    <span>图书馆三楼</span>
+                    <span>0</span>
+                  </div>
+                  <div class="tr" data-id="F-20261126-003">
+                    <span><b>F-20261126-003</b><small>昨天 10:20</small></span>
+                    <span class="st open">待处理</span>
+                    <span><b>白色 AirPods 充电盒</b><small>耳机盒 · 白色</small></span>
+                    <span>教学楼 204</span>
+                    <span>0</span>
+                  </div>
+                  <div class="tr" data-id="F-20261126-004">
+                    <span><b>F-20261126-004</b><small>昨天 12:20</small></span>
+                    <span class="st open">待处理</span>
+                    <span><b>蓝色膳魔师保温杯</b><small>水杯 · 蓝色</small></span>
+                    <span>图书馆二楼</span>
+                    <span>0</span>
+                  </div>
+                  <div class="tr" data-id="L-20261126-004">
+                    <span><b>L-20261126-004</b><small>昨天 19:14</small></span>
+                    <span class="st matched">已匹配</span>
+                    <span><b>黑色 AirPods 耳机盒</b><small>失物 · 黑色</small></span>
+                    <span>图书馆三楼</span>
+                    <span>0</span>
+                  </div>
+                </div>
+                <div class="audit-line hidden" id="audit-line"><span>✓</span><b>审计</b> admin_claim_redeemed · 管理员 值班老师 · 原因：服务台核销</div>
+              </section>
+
+              <aside class="admin-chat">
+                <div class="admin-chat-head"><div><strong>管理助手</strong><small>查询 · 修改 · 审核 · 核销</small></div><span class="tiny-live"><i></i>在线</span></div>
+                <div id="admin-messages" class="msgs admin-msgs">
+                  <div class="admin-welcome"><span class="mini-orb">寻</span><p>老师您好，我可以帮您查案件、查认领、看统计。要改东西，我会先给您预览。</p></div>
+                </div>
+                <div id="admin-pending" class="pending hidden">
+                  <strong>待确认变更</strong>
+                  <p>将核销认领码 <b>LF-CUYC</b>：<br>认领 → 已核销，案件 → 已归还。</p>
+                  <div class="pending-actions"><span class="fake-btn primary" id="confirm-btn">确认执行</span><span class="fake-btn">取消</span></div>
+                </div>
+                <div class="composer admin-composer"><span class="composer-text">比如：查一下这条认领记录</span><span class="send">发送 <i>➤</i></span></div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="narration" id="narration">
+      <span class="n-label">旁白</span>
+      <p id="narration-text">点击开始后，旁白会跟着流程走。</p>
+    </div>
+
+    <footer class="footer">
+      <div class="progress"><span id="progress-fill"></span></div>
+      <div class="footer-text"><span>寻物有迹 · 自动演示</span><span id="scene-label">拾得登记</span></div>
+    </footer>
+  </div>
+
+  <div class="intro" id="intro">
+    <div class="intro-mark">寻</div>
+    <div class="intro-eyebrow">CAMPUS LOST &amp; FOUND AGENT</div>
+    <div class="intro-title">寻物有迹</div>
+    <div class="intro-sub">从拾得登记，到失主认领，再到管理台核销。</div>
+    <div class="intro-line"><span></span></div>
+    <div class="intro-hint">约 70 秒 · 点击后自动播放，旁白会跟着流程走</div>
+    <div class="intro-actions">
+      <button type="button" id="start-btn" class="start-btn">开始播放（含旁白）</button>
+      <button type="button" id="silent-btn" class="silent-btn">静音播放</button>
+    </div>
+  </div>
+
+  <div class="outro hidden" id="outro">
+    <div class="outro-eyebrow">AUTO DEMO / COMPLETE</div>
+    <div class="outro-title">把信息问全，<br>把两边对上，<br><em>对交接负责。</em></div>
+    <p>这就是寻物有迹：一个校园失物招领 Agent 的完整闭环。</p>
+    <button type="button" id="again-btn">再看一遍</button>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

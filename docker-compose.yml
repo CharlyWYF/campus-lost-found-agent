@@ -1,0 +1,24 @@
+services:
+  lostfound:
+    build: .
+    container_name: lostfound-agent
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # 容器内必须监听 0.0.0.0，宿主机/反向代理才能访问
+      LF_WEB_HOST: 0.0.0.0
+      LF_WEB_PORT: "8000"
+      TZ: Asia/Shanghai
+      LF_WEB_QUIET: "1"
+    # 如果 NAS 的反向代理跑在宿主机上，只绑定 127.0.0.1 最安全；
+    # 如果反向代理是另一个容器，改成 expose + 共享 Docker 网络。
+    # 只改宿主机端口：在 .env 里设 LF_HOST_PORT=9080；
+    # 容器内部仍然监听 8000，健康检查不用改。
+    ports:
+      - "127.0.0.1:${LF_HOST_PORT:-8000}:8000"
+    volumes:
+      - lostfound_data:/app/data
+
+volumes:
+  lostfound_data:
