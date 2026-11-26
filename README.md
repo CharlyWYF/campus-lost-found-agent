@@ -18,7 +18,6 @@
 无需安装第三方依赖，Python 3.9+ 即可：
 
 ```bash
-cd "期末 agent"
 cp .env.example .env
 # 编辑 .env，填入 LLM_API_KEY / LLM_BASE_URL / LLM_MODEL
 python3 server.py
